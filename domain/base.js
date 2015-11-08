@@ -45,6 +45,18 @@ BaseDomain = class Domain {
     get contextName () {
         return Utils.contextName(this.context, this.name);
     }
+    get Domain () {
+        var domains = DomainRepo.getAll(Utils.contextName(this.context, this.name));
+
+        if (domains && Match.test(domains, Array), domains.length > 0) {
+            var returnDomain = {};
+            _.each(domains, function (domain) {
+                returnDomain[domain.name] = domain;
+            });
+            return returnDomain;
+        }
+        return false;
+    }
 };
 
 

@@ -7,7 +7,8 @@ ExposeDomain = class Domain {
         if (this.context) {
             var context = Utils.contextSplit(this.context),
                 parentDomainName = context.pop(),
-                parentDomainContext = (context.length > 0) ? Utils.contextName(...context) : false;
+                parentDomainContext = (Match.test(context, Array) && context.length > 0) ? Utils.contextName(...context) : false;
+
             return DomainRepo.getExposed(parentDomainName, parentDomainContext);
         }
         return false;
@@ -20,8 +21,13 @@ ExposeDomain = class Domain {
     }
     get Domain() {
         var domains = DomainRepo.getAllExposed(Utils.contextName(this.context, this.name));
-        if (domains) {
-            return domains;
+
+        if (domains && Match.test(domains, Array), domains.length > 0) {
+            var returnDomain = {};
+            _.each(domains, function (domain) {
+                returnDomain[domain.name] = domain;
+            });
+            return returnDomain;
         }
         return false;
     }

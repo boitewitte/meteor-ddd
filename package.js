@@ -12,9 +12,9 @@ Package.describe({
 
 Package.onUse(function(api) {
     api.versionsFrom('1.2.0.1');
-    api.use(['ecmascript', 'underscore']);
+    api.use(['ecmascript', 'underscore', 'check']);
     api.addFiles('lib/utils.js');
-    api.addFiles(['']);
+    api.addFiles(['domain/repository.js','domain/base.js', 'domain/expose.js', 'domain/export.js']);
     /*api.addFiles('domain.js');
     api.addFiles('entity.js');
     api.addFiles('aggregate.js');*/
@@ -23,7 +23,8 @@ Package.onUse(function(api) {
 
 Package.onTest(function(api) {
     api.use('ecmascript');
-    api.use(['tinytest', 'underscore']);
+    api.use(['tinytest', 'underscore', 'ejson']);
     api.use('boite:ddd');
-    api.addFiles(['tests/entity.js','tests/aggregate.js']);
+    //api.addFiles(['tests/entity.js','tests/aggregate.js']);
+    api.addFiles(['tests/domain.js', 'tests/subdomain.js']);
 });

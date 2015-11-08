@@ -1,10 +1,11 @@
 (function (DDD) {
     DDD.Domain = function (name, factory) {
         check(name, String);
-        check(factory, Function);
 
         DomainRepo.create(name);
+
         if (factory) {
+            check(factory, Function);
             factory(DomainRepo.get(name));
         }
 

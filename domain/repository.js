@@ -15,6 +15,11 @@ function getAllInContextRegexp(context = false) {
 
 DomainRepo = {
     get: function (name, context = false) {
+        check(name, String);
+        check(context, Match.OneOf(String, false));
+
+        name = Utils.capitalize(name);
+
         let domainName = Utils.contextName(context, name);
         if (!DomainRepository[domainName]) {
             DomainRepository[domainName] = new BaseDomain(name, domainOptions(context));
@@ -22,18 +27,27 @@ DomainRepo = {
         return DomainRepository[domainName];
     },
     getAll: function (context = false) {
+        check(context, Match.OneOf(String, false));
+
         let contextRegExp = getAllInContextRegexp(context);
         return _.filter(DomainRepository, function (domainClass, domainName) {
-            return contextRegExp.text(domainName);
-        });
+            return contextRegExp.test(domainName);
+        }) || false;
     },
     getAllExposed: function (context) {
+        check(context, Match.OneOf(String, false));
+
         let contextRegExp = getAllInContextRegexp(context);
         return _.filter(ExposedDomainRepository, function (domainClass, domainName) {
-            return contextRegExp.text(domainName);
-        });
+            return contextRegExp.test(domainName);
+        }) || false;
     },
     getExposed: function (name, context = false) {
+        check(name, String);
+        check(context, Match.OneOf(String, Boolean));
+
+        name = Utils.capitalize(name);
+
         let domainName = Utils.contextName(context, name);
         if (ExposedDomainRepository[domainName]) {
             return ExposedDomainRepository[domainName];
@@ -41,14 +55,20 @@ DomainRepo = {
         return false;
     },
     create: function (name, context = false) {
+        check(name, String);
+        check(context, Match.OneOf(String, false));
+        name = Utils.capitalize(name);
         let domainName = Utils.contextName(context, name);
         if (!DomainRepo.get(name, context)) {
             DomainRepository[domainName] = new BaseDomain(name, domainOptions(context));
             return true;
         }
         return false;
-    }
-    createExposed: function (name, context) {
+    },
+    createExposed: function (name, context = false) {
+        check(name, String);
+        check(context, Match.OneOf(String, false));
+        name = Utils.capitalize(name);
         let domainName = Utils.contextName(context, name);
         if (!DomainRepo.getExposed(name, context)) {
             ExposedDomainRepository[domainName] = new ExposeDomain(name, domainOptions(context));
