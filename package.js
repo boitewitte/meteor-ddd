@@ -23,8 +23,9 @@ Package.onUse(function(api) {
 
 Package.onTest(function(api) {
     api.use('ecmascript');
-    api.use(['tinytest', 'underscore', 'ejson']);
+    api.use(['tinytest', 'underscore', 'ejson', 'check']);
     api.use('boite:ddd');
+    api.addFiles('lib/utils.js');
     //api.addFiles(['tests/entity.js','tests/aggregate.js']);
-    api.addFiles(['tests/domain.js', 'tests/subdomain.js']);
+    api.addFiles(['tests/utils.js', 'tests/domain.js', 'tests/subdomain.js']);
 });
