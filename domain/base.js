@@ -5,47 +5,33 @@ BaseDomain = class Domain {
         this.context = options.context || false;
 
     }
-    aggregate(name, aggregateClass, aggregateFactory) {
-        if(setAggregate(this.contextName, name, aggregateClass, aggregateFactory)) {
+    context(contextName, factory) {
+        check(contextName, String);
+        check(factory, Function);
 
+        var subDomainContext = Utils.contextName(this.context, this.name);
+        ContextRepo.create(contextName, subDomainContext);
+
+        if (factory) {
+            factory(ContextRepo.get(contextName, subDomainContext));
+        }
+
+        ContextRepo.createExposed(contextName, subDomainContext);
+        return ContextRepo.getExposed(contextName, subDomainContext);
+    }
+    get Context () {
+        var contexts = ContextRepo.getAll(Utils.contextName(this.context, this.name));
+
+        if (contexts && Match.test(contexts, Array), contexts.length > 0) {
+            var returnContext = {};
+            _.each(contexts, function (context) {
+                returnContext[context.name] = context;
+            });
+            return returnContext;
         }
         return false;
     }
-    domain(name, factory) {
-        check(name, String);
-        check(factory, Function);
-        var subDomainContext = Utils.contextName(this.context, this.name);
-        DomainRepo.create(name, subDomainContext);
-        if (factory) {
-            factory(DomainRepo.get(name, subDomainContext));
-        }
-
-        DomainRepo.createExposed(name, subDomainContext);
-        return DomainRepo.getExposed(name, subDomainContext);
-    }
-    repository(name, repositoryClass, repositoryFactory) {
-        if(setRepository(this.contextName, name, repositoryClass, repositoryFactory)) {
-
-        }
-    }
-    service (name, service) {
-        if (setService(this.contextName, name, service)) {
-
-        }
-    }
-    get Aggregate () {
-
-    }
-    get Repository () {
-
-    }
-    get Service () {
-
-    }
-    get contextName () {
-        return Utils.contextName(this.context, this.name);
-    }
-    get Domain () {
+    /*get Domain () {
         var domains = DomainRepo.getAll(Utils.contextName(this.context, this.name));
 
         if (domains && Match.test(domains, Array), domains.length > 0) {
@@ -56,7 +42,7 @@ BaseDomain = class Domain {
             return returnDomain;
         }
         return false;
-    }
+    }*/
 };
 
 

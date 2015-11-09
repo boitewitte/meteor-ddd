@@ -2,14 +2,14 @@
     DDD.Domain = function (name, factory) {
         check(name, String);
 
-        DomainRepo.create(name);
+        DomainRepo.createMain(name);
 
         if (factory) {
             check(factory, Function);
             factory(DomainRepo.get(name));
         }
 
-        DomainRepo.createExposed(name);
-        return DomainRepo.getExposed(name);
+        DomainRepo.createMainExposed(name);
+        return DomainRepo.getMainExposed(name);
     }
 })(DDD || (DDD = {}));

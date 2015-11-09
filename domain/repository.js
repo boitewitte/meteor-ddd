@@ -54,6 +54,26 @@ DomainRepo = {
         }
         return false;
     },
+    getMain: function (domainName) {
+        check(domainName, String);
+
+        domainName = Utils.contextName(Utils.capitalize(domainName));
+
+        if (DomainRepository[domainName]) {
+            return DomainRepository[domainName];
+        }
+        return false;
+    },
+    getMainExposed: function (domainName) {
+        check(domainName, String);
+
+        domainName = Utils.contextName(Utils.capitalize(domainName));
+
+        if (ExposedDomainRepository[domainName]) {
+            return ExposedDomainRepository[domainName];
+        }
+        return false;
+    }
     create: function (name, context = false) {
         check(name, String);
         check(context, Match.OneOf(String, false));
@@ -72,6 +92,27 @@ DomainRepo = {
         let domainName = Utils.contextName(context, name);
         if (!DomainRepo.getExposed(name, context)) {
             ExposedDomainRepository[domainName] = new ExposeDomain(name, domainOptions(context));
+            return true;
+        }
+        return false;
+    },
+    createMain: function (domainName) {
+        check(domainName, String);
+
+        domainName = Utils.contextName(Utils.capitalize(domainName));
+        if (!DomainRepository[domainName]){
+            DomainRepository[domainName] = new MainBase(domainName);
+            return true;
+        }
+        return false;
+    },
+    createMainExposed: function (domainName) {
+        check (domainName, String);
+
+        domainName = Utils.contextName(Utils.capitalize(domainName));
+
+        if (!ExposedDomainRepository[domainName]) {
+            ExposedDomainRepository[domainName] = new ExposeMainDomain(domainName);
             return true;
         }
         return false;
